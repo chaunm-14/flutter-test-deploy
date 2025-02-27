@@ -25,5 +25,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_PAGE_TOKEN }}
           command: |
-            pages project list
             pages deploy ./build/web --project-name=cf-deploy-test
