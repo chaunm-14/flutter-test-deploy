@@ -5,6 +5,19 @@ on:
     branch:
       - main
 
+env:
+  GLOBAL_DISCORD_EMBEDS: |
+    {
+      "author": {
+        "name": "${{ github.actor }}",
+        "url": "${{ github.server_url }}/${{ github.actor }}",
+        "icon_url": "${{ github.server_url }}/${{ github.actor }}.png?size=32"
+      },
+      "title": "${{ github.workflow }}",
+      "description": "${{ github.ref }}",
+      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+    }
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -32,9 +45,31 @@ jobs:
     needs:
       - deploy
     steps:
-      - name: Discord notification
+      - name: Discord notification success
+        if: ${{ needs.deploy.result == 'success' }}
+        uses: Ilshidur/action-discord@master
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_EMBEDS: |
+            [
+              {
+                "title": ":rocket: Build successfully",
+                "color": "1127128"
+              },
+              ${{ env.GLOBAL_DISCORD_EMBEDS }}
+            ]
+            
+      - name: Discord notification failure
+        if: ${{ needs.deploy.result == 'failure' }}
         uses: Ilshidur/action-discord@master
-        with:
-          args: 'The project has been deployed.'
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_EMBEDS: |
+            [
+              {
+                "title": ":broken_heart: Build failure please check.",
+                "color": "14177041"
+              },
+              ${{ env.GLOBAL_DISCORD_EMBEDS }}
+            ]
+      
