@@ -1,0 +1,29 @@
+name: fe-pos-quickshop
+
+on:
+  push:
+    branch:
+      - main
+
+jobs:
+  build:
+    run-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter SDK
+        uses: flutter-actions/setup-flutter@v4
+        with:
+          channel: stable
+          version: 3.29
+      
+      - run: flutter clean
+      - run: flutter pub get
+      - run: flutter build web
+      
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CF_PAGE_TOKEN }}
+          command: |
+            pages project list
+            pages deploy ./build/web --project-name=cf-deploy-test
