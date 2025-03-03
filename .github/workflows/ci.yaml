@@ -38,7 +38,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_PAGE_TOKEN }}
           command: |
-            pages deploy ./build/web --project-name=cf-deploy-test
+            pages deploy ./build/web --project-name=${{ secrets.CF_PROJECT_NAME }}
   
   notification:
     runs-on: ubuntu-latest
