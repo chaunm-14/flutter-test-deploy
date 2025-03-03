@@ -45,7 +45,7 @@ jobs:
     needs:
       - deploy
     steps:
-      - name: Discord notification success
+      - name: Send successful notification to discord
         if: ${{ needs.deploy.result == 'success' }}
         uses: Ilshidur/action-discord@master
         env:
@@ -59,7 +59,7 @@ jobs:
               ${{ env.GLOBAL_DISCORD_EMBEDS }}
             ]
             
-      - name: Discord notification failure
+      - name: Send failure notification to discord
         if: ${{ needs.deploy.result == 'failure' }}
         uses: Ilshidur/action-discord@master
         env:
