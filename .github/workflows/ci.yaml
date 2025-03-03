@@ -2,7 +2,7 @@ name: fe-pos-quickshop
 
 on:
   push:
-    branch:
+    branches:
       - main
 
 env:
