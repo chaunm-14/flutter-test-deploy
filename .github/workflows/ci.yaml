@@ -4,7 +4,6 @@ on:
   push:
     branch:
       - main
-  pull_request: ~
 
 env:
   GLOBAL_DISCORD_EMBEDS: |
